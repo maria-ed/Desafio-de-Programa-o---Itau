@@ -1,2 +1,2 @@
-# Desafio-de-Programa-o---Itau
+# DesafioDeProgramacao-ItauUnibanco
 API Rest que calcula transações e devolve estatísticas. 
