@@ -24,7 +24,7 @@ public class TransacaoController {
 	
 TransacaoService transacaoService = new TransacaoServiceImpl(); 
 	
-	@GetMapping("/aluno")
+	@GetMapping("/transacao")
 	public List<Transacao> getAll(){
 		return transacaoService.getAll();
 	}
@@ -42,7 +42,7 @@ TransacaoService transacaoService = new TransacaoServiceImpl();
 
 	@PostMapping("/transacao")
 	public ResponseEntity<Transacao>  insert(@RequestBody Transacao transacao) {
-		if(transacao.getId() != 0)
+		if(transacao.getId() >= 0)
 			return ResponseEntity.badRequest().body(transacao);
 		
 		transacaoService.insert(transacao);		
