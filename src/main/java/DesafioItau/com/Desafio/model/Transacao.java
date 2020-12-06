@@ -3,17 +3,18 @@ package DesafioItau.com.Desafio.model;
 import java.time.OffsetDateTime;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 
 public class Transacao {
 	//Atributos
 	
-	   @NotNull
-		private OffsetDateTime dataHora;
+	@PastOrPresent
+		private OffsetDateTime  dataHora = OffsetDateTime.now();
 		
 		@NotNull
-		private float valor ;
+		private double valor ;
 		
-		
+		/*
 		private int id;
 		
 		
@@ -30,13 +31,13 @@ public class Transacao {
 			super();
 		}
 		
-		public Transacao (OffsetDateTime dataHora, float valor, int id) {
+		public Transacao (OffsetDateTime dataHora, double valor, int id) {
 			super();
 			this.dataHora = dataHora;
 			this.valor = valor;
 			this.id = id;
 		}
-
+           */
 		public OffsetDateTime getDataHora() {
 			return dataHora;
 		}
@@ -45,11 +46,11 @@ public class Transacao {
 			this.dataHora = dataHora;
 		}
 
-		public float getValor() {
+		public double getValor() {
 			return valor;
 		}
 
-		public void setValor(float valor) {
+		public void setValor(double valor) {
 			this.valor = valor;
 		}
 		

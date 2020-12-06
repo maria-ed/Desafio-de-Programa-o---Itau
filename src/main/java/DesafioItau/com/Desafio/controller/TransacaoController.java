@@ -2,71 +2,72 @@ package DesafioItau.com.Desafio.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import DesafioItau.com.Desafio.controller.*;
 import DesafioItau.com.Desafio.model.Transacao;
 import DesafioItau.com.Desafio.service.TransacaoService;
-import DesafioItau.com.Desafio.service.impl.TransacaoServiceImpl;
 
-@CrossOrigin("*")
 @RestController
+@RequestMapping("/transacao")
+@CrossOrigin("*")
 public class TransacaoController {
-
 	
 	
-TransacaoService transacaoService = new TransacaoServiceImpl(); 
+	@Autowired
+	private TransacaoService repository;
 	
-	@GetMapping("/transacao")
-	public List<Transacao> getAll(){
-		return transacaoService.getAll();
+	@GetMapping
+	public ResponseEntity<List<Transacao>> getAll(){
+		return ResponseEntity.ok(repository.getTransacoes());
 	}
 	
-	@GetMapping("/transacao/{id}")
-	public ResponseEntity<Transacao> getById(@PathVariable int id) {
-		Transacao transacao = transacaoService.getById(id);
+	
+	@PostMapping
+	public ResponseEntity<Transacao> post(@Valid @RequestBody Transacao transacao) {
 		
-		if(transacao == null)
-			ResponseEntity.notFound();
+		repository.add(transacao);
 		
-		return ResponseEntity.ok(transacao);
-	}
-
-
-	@PostMapping("/transacao")
-	public ResponseEntity<Transacao>  insert(@RequestBody Transacao transacao) {
-		if(transacao.getId() >= 0)
-			return ResponseEntity.badRequest().body(transacao);
+		if(transacao == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		} if(transacao.getValor()<0) {
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+		}
 		
-		transacaoService.insert(transacao);		
-		return ResponseEntity.ok(transacao);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
-	@PutMapping("/transacao")
-	public Transacao  alterar(@RequestBody Transacao transacao) {
-		transacaoService.update(transacao);
-		return transacao;
+	@DeleteMapping
+	public ResponseEntity<Transacao> delete() {
+		
+		repository.clear();
+		
+		
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
-	
-	
-	@DeleteMapping("/transacao/{id}")
-	public void delete(@PathVariable int id) {
-		transacaoService.delete(id);
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
+
+
+
+	
+
+	
+	
+	
+	
+	
+	
+	
+
